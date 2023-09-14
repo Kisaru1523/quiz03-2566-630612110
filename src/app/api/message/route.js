@@ -2,6 +2,7 @@ import { DB, readDB, writeDB } from "@/app/libs/DB";
 import { checkToken } from "@/app/libs/checkToken";
 import { nanoid } from "nanoid";
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 
 export const GET = async (request) => {
   readDB();
@@ -39,15 +40,15 @@ export const POST = async (request) => {
 
 export const DELETE = async (request) => {
   const payload = checkToken();
-
-  // return NextResponse.json(
-  //   {
-  //     ok: false,
-  //     message: "Invalid token",
-  //   },
-  //   { status: 401 }
-  // );
-
+  if (payload === false) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Invalid token",
+      },
+      { status: 401 }
+    );
+  }
   readDB();
 
   // return NextResponse.json(
